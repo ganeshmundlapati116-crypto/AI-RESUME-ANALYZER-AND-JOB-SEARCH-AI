@@ -1,0 +1,447 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.job-search-page {
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.page-header {
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    color: white;
+
+    padding: 45px 8%;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.page-header h1 {
+    margin: 0;
+
+    font-size: 36px;
+
+    font-weight: 700;
+}
+
+.page-header p {
+    margin-top: 10px;
+
+    font-size: 16px;
+
+    color: #dbeafe;
+}
+
+
+/* =========================================================
+   SEARCH SECTION
+========================================================= */
+
+.search-section {
+    max-width: 1200px;
+
+    margin: -25px auto 30px;
+
+    padding: 0 25px;
+
+    position: relative;
+}
+
+
+.search-box {
+    display: flex;
+
+    gap: 12px;
+
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+.search-box input {
+    flex: 1;
+
+    height: 52px;
+
+    border: 1px solid #d6dbe5;
+
+    border-radius: 10px;
+
+    padding: 0 18px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+.search-box input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+.search-box button {
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 0 28px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.search-box button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+.alert {
+    max-width: 1150px;
+
+    margin: 20px auto;
+
+    padding: 15px 20px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+}
+
+
+.error {
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+}
+
+
+/* =========================================================
+   SEARCH RESULT INFO
+========================================================= */
+
+.search-result-info {
+    max-width: 1150px;
+
+    margin: 10px auto 25px;
+
+    padding: 0 25px;
+}
+
+
+.search-result-info h3 {
+    margin: 0;
+
+    font-size: 18px;
+
+    color: #334155;
+}
+
+
+/* =========================================================
+   JOB SECTION
+========================================================= */
+
+.jobs-section {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 10px 25px 50px;
+}
+
+
+.section-heading {
+    margin-bottom: 25px;
+}
+
+
+.section-heading h2 {
+    margin: 0;
+
+    font-size: 27px;
+
+    color: #172033;
+}
+
+
+.section-heading p {
+    margin-top: 7px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   JOB GRID
+========================================================= */
+
+.jobs-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(330px, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   JOB CARD
+========================================================= */
+
+.job-card {
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    padding: 23px;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.06);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
+}
+
+
+.job-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 12px 28px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   JOB TITLE
+========================================================= */
+
+.job-title-row {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+.company-logo {
+    width: 48px;
+
+    height: 48px;
+
+    min-width: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border-radius: 12px;
+
+    font-size: 24px;
+}
+
+
+.job-title-row h3 {
+    margin: 0 0 7px;
+
+    font-size: 18px;
+
+    line-height: 1.4;
+
+    color: #172033;
+}
+
+
+.company-name {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   JOB INFO
+========================================================= */
+
+.job-info {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+
+.info-item {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    padding: 8px 11px;
+
+    font-size: 13px;
+
+    color: #475569;
+}
+
+
+.info-item .icon {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   JOB ACTION
+========================================================= */
+
+.job-actions {
+    border-top: 1px solid #edf0f5;
+
+    padding-top: 18px;
+}
+
+
+.details-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 44px;
+
+    background: #2563eb;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+
+.details-button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .page-header {
+        padding: 30px 20px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        height: 50px;
+    }
+
+    .jobs-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

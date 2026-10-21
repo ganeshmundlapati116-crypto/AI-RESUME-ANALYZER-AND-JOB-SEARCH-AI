@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Search</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .back-dashboard {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .back-dashboard:hover {
+            background: white;
+            color: #2563eb;
+            transform: translateX(-3px);
+        }
+
+        .page-header {
+            position: relative;
+        }
+
+        .job-card {
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(15,23,42,0.10);
+        }
+
+        .details-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 13px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            border: none;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+        }
+
+        .details-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .apply-button {
+            background: #059669;
+            color: white;
+        }
+
+        .save-button {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .saved-jobs-link {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .job-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .job-actions form {
+            margin: 0;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .filter-row select {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            min-width: 160px;
+            box-sizing: border-box;
+            flex: 1;
+        }
+
+        .filter-row button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .alert.error {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .job-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .salary-label {
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-row select,
+            .filter-row button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="job-search-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <a href="{{ url_for('home') }}" class="back-dashboard">
+            ← Back to Dashboard
+        </a>
+
+        <div>
+            <h1>🤖 AI Job Search</h1>
+            <p>Find job opportunities based on your skills and preferences.</p>
+        </div>
+    </div>
+
+    <!-- JOB SEARCH FORM -->
+    <div class="search-section">
+        <form method="POST" action="{{ url_for('chatbot') }}">
+
+            <input
+                class="search-input"
+                type="text"
+                name="message"
+                placeholder="Search jobs... Example: Python Developer"
+                value="{{ request.form.get('message', '') }}"
+                required
+            >
+
+            <div class="filter-row">
+                <select name="country">
+                    <option value="worldwide"
+                        {% if request.form.get('country', 'worldwide') == 'worldwide' %}selected{% endif %}>
+                        🌍 Worldwide
+                    </option>
+
+                    <option value="in"
+                        {% if request.form.get('country') == 'in' %}selected{% endif %}>
+                        🇮🇳 India
+                    </option>
+
+                    <option value="gb"
+                        {% if request.form.get('country') == 'gb' %}selected{% endif %}>
+                        🇬🇧 United Kingdom
+                    </option>
+
+                    <option value="us"
+                        {% if request.form.get('country') == 'us' %}selected{% endif %}>
+                        🇺🇸 United States
+                    </option>
+
+                    <option value="ca"
+                        {% if request.form.get('country') == 'ca' %}selected{% endif %}>
+                        🇨🇦 Canada
+                    </option>
+
+                    <option value="au"
+                        {% if request.form.get('country') == 'au' %}selected{% endif %}>
+                        🇦🇺 Australia
+                    </option>
+
+                    <option value="de"
+                        {% if request.form.get('country') == 'de' %}selected{% endif %}>
+                        🇩🇪 Germany
+                    </option>
+
+                    <option value="sg"
+                        {% if request.form.get('country') == 'sg' %}selected{% endif %}>
+                        🇸🇬 Singapore
+                    </option>
+
+                    <option value="ae"
+                        {% if request.form.get('country') == 'ae' %}selected{% endif %}>
+                        🇦🇪 United Arab Emirates
+                    </option>
+                </select>
+
+                <button type="submit">
+                    🔍 Search Jobs
+                </button>
+            </div>
+        </form>
+
+        <!-- MY SAVED JOBS LINK -->
+        <a href="{{ url_for('saved_jobs') }}" class="saved-jobs-link">
+            ❤️ My Saved Jobs
+        </a>
+    </div>
+
+    <!-- ERROR MESSAGE -->
+    {% if error_message %}
+        <div class="alert error">
+            ⚠️ {{ error_message }}
+        </div>
+    {% endif %}
+
+    <!-- SEARCH RESPONSE -->
+    {% if response %}
+        <div class="search-result-info">
+            <h3>{{ response }}</h3>
+        </div>
+    {% endif %}
+
+    <!-- AVAILABLE JOBS -->
+    <div class="jobs-section">
+        <div class="section-heading">
+            <div>
+                <h2>Available Jobs</h2>
+
+                {% if jobs %}
+                    <p>{{ jobs|length }} job opportunities found</p>
+                {% else %}
+                    <p>Search for a job to see available opportunities.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if jobs %}
+            <div class="jobs-grid">
+
+                {% for job in jobs %}
+                    <div class="job-card">
+
+                        <!-- JOB TITLE AND COMPANY -->
+                        <div class="job-title-row">
+                            <div class="company-logo">🏢</div>
+
+                            <div>
+                                <h3>{{ job.title }}</h3>
+                                <span class="company-name">
+                                    {{ job.company }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- JOB INFORMATION -->
+                        <div class="job-info">
+
+                            <div class="info-item">
+                                <span class="icon">📍</span>
+                                <span>
+                                    {{ job.location or 'Location not specified' }}
+                                </span>
+                            </div>
+
+                            {% if job.country %}
+                                <div class="info-item">
+                                    <span class="icon">🌍</span>
+                                    <span>{{ job.country }}</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="info-item">
+                                <span class="icon">💼</span>
+                                <span>
+                                    {{ job.employment_type or 'Employment type not specified' }}
+                                </span>
+                            </div>
+
+                            {% if job.salary %}
+                                <div class="info-item">
+                                    <span class="icon">💰</span>
+                                    <span>
+                                        <span class="salary-label">Salary:</span>
+                                        {{ job.salary }}
+                                    </span>
+                                </div>
+                            {% elif job.min_salary or job.max_salary %}
+                                <div class="info-item">
+                                    <span class="icon">💰</span>
+                                    <span>
+                                        <span class="salary-label">Salary:</span>
+                                        {{ job.min_salary or 'N/A' }}
+                                        -
+                                        {{ job.max_salary or 'N/A' }}
+                                        {{ job.salary_period or '' }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if job.remote %}
+                                <div class="info-item">
+                                    <span class="icon">🏠</span>
+                                    <span>Remote Job</span>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <!-- JOB ACTION BUTTONS -->
+                        <div class="job-actions">
+
+                            <!-- VIEW DETAILS -->
+                            <a
+                                href="{{ url_for('job_details', job_index=loop.index0) }}"
+                                class="details-button">
+                                👁 View Job Details
+                            </a>
+
+                            <!-- APPLY NOW -->
+                            {% if job.apply_link %}
+                                <a
+                                    href="{{ job.apply_link }}"
+                                    class="details-button apply-button"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    🚀 Apply Now
+                                </a>
+                            {% endif %}
+
+                            <!-- SAVE JOB -->
+                            <form
+                                method="POST"
+                                action="{{ url_for('save_job', job_index=loop.index0) }}">
+
+                                <button
+                                    type="submit"
+                                    class="details-button save-button">
+                                    ❤️ Save Job
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | AI Resume Analyzer</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(99, 102, 241, 0.12),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(14, 165, 233, 0.12),
+                    transparent 30%
+                ),
+                #f8fafc;
+
+            color: #0f172a;
+        }
+
+
+        /* NAVBAR */
+
+        .navbar {
+
+            height: 72px;
+
+            background: white;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .brand-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #06b6d4
+                );
+
+            box-shadow:
+                0 6px 15px rgba(99, 102, 241, 0.22);
+        }
+
+
+        .brand-text {
+
+            font-size: 19px;
+
+            font-weight: 750;
+
+            color: #0f172a;
+        }
+
+
+        .logout-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 9px 16px;
+
+            border-radius: 9px;
+
+            background: #fef2f2;
+
+            color: #dc2626;
+
+            border: 1px solid #fecaca;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 650;
+
+            transition: 0.2s;
+        }
+
+
+        .logout-btn:hover {
+
+            background: #fee2e2;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* MAIN */
+
+        .main {
+
+            width: 88%;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 45px 0 60px;
+        }
+
+
+        /* WELCOME */
+
+        .welcome-section {
+
+            margin-bottom: 35px;
+        }
+
+
+        .welcome-section h1 {
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+
+            color: #0f172a;
+        }
+
+
+        .welcome-section h1 span {
+
+            color: #6366f1;
+        }
+
+
+        .welcome-section p {
+
+            color: #64748b;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* STATS */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            box-shadow:
+                0 5px 18px rgba(15, 23, 42, 0.04);
+        }
+
+
+        .stat-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+            background: #eef2ff;
+        }
+
+
+        .stat-card h4 {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-bottom: 4px;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .stat-card p {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            color: #0f172a;
+        }
+
+
+        /* SECTION TITLE */
+
+        .section-title {
+
+            margin-bottom: 18px;
+        }
+
+
+        .section-title h2 {
+
+            font-size: 21px;
+
+            color: #0f172a;
+
+            margin-bottom: 5px;
+        }
+
+
+        .section-title p {
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* FEATURE CARDS */
+
+        .feature-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .feature-card {
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 17px;
+
+            padding: 25px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 6px 20px rgba(15, 23, 42, 0.05);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .feature-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 110px;
+
+            height: 110px;
+
+            border-radius: 50%;
+
+            background: rgba(99, 102, 241, 0.06);
+
+            right: -40px;
+
+            top: -40px;
+        }
+
+
+        .feature-card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 14px 30px rgba(15, 23, 42, 0.09);
+        }
+
+
+        .feature-icon {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #ecfeff
+                );
+
+            margin-bottom: 18px;
+        }
+
+
+        .feature-card h3 {
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+
+            color: #0f172a;
+        }
+
+
+        .feature-card p {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            min-height: 42px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* BUTTONS */
+
+        .action-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 11px 17px;
+
+            border-radius: 9px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            border: none;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #06b6d4
+                );
+
+            box-shadow:
+                0 6px 14px rgba(99, 102, 241, 0.18);
+
+            transition: 0.2s;
+        }
+
+
+        .action-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 9px 18px rgba(99, 102, 241, 0.25);
+        }
+
+
+        .secondary-btn {
+
+            background: #f1f5f9;
+
+            color: #334155;
+
+            box-shadow: none;
+
+            border: 1px solid #e2e8f0;
+        }
+
+
+        .secondary-btn:hover {
+
+            background: #e2e8f0;
+
+            box-shadow: none;
+        }
+
+
+        /* ROLE ANALYSIS */
+
+        .role-section {
+
+            margin-top: 35px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 17px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 6px 20px rgba(15, 23, 42, 0.04);
+        }
+
+
+        .role-form {
+
+            display: flex;
+
+            gap: 12px;
+
+            align-items: end;
+        }
+
+
+        .role-field {
+
+            flex: 1;
+        }
+
+
+        .role-field label {
+
+            display: block;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            font-weight: 650;
+
+            margin-bottom: 8px;
+        }
+
+
+        select {
+
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border-radius: 9px;
+
+            border: 1px solid #cbd5e1;
+
+            background: #f8fafc;
+
+            color: #334155;
+
+            font-size: 14px;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        select:focus {
+
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px rgba(99, 102, 241, 0.10);
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 45px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .feature-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .role-form {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+
+            .main {
+
+                width: 92%;
+
+                padding-top: 30px;
+            }
+
+
+            .brand-text {
+
+                font-size: 16px;
+            }
+
+
+            .welcome-section h1 {
+
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<nav class="navbar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🤖
+        </div>
+
+        <div class="brand-text">
+            AI Resume Analyzer
+        </div>
+
+    </div>
+
+
+    <a
+        href="/logout"
+        class="logout-btn"
+    >
+        🚪 Logout
+    </a>
+
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<main class="main">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome-section">
+
+        <h1>
+            Welcome, <span>{{ name }}</span> 👋
+        </h1>
+
+        <p>
+            Manage your resume, analyze your ATS score,
+            find jobs and practice interviews from one place.
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         QUICK STATS
+    ================================================== -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h4>
+                    Resume
+                </h4>
+
+                <p>
+                    Upload & Analyze
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h4>
+                    ATS
+                </h4>
+
+                <p>
+                    Resume Score
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💼
+            </div>
+
+            <div>
+
+                <h4>
+                    Career
+                </h4>
+
+                <p>
+                    Jobs & Interviews
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         FEATURES
+    ================================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            Career Tools
+        </h2>
+
+        <p>
+            Choose a tool to continue
+        </p>
+
+    </div>
+
+
+    <section class="feature-grid">
+
+
+        <!-- UPLOAD -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                📄
+            </div>
+
+            <h3>
+                Upload Resume
+            </h3>
+
+            <p>
+                Upload your PDF or DOCX resume
+                and prepare it for AI-powered analysis.
+            </p>
+
+            <a
+                href="/upload"
+                class="action-btn"
+            >
+                Upload Resume →
+            </a>
+
+        </div>
+
+
+
+        <!-- ANALYZE -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Analyze Resume
+            </h3>
+
+            <p>
+                Check your ATS score, skills,
+                education, projects and missing skills.
+            </p>
+
+            <a
+                href="/analyze"
+                class="action-btn"
+            >
+                Analyze Resume →
+            </a>
+
+        </div>
+
+
+
+        <!-- JOB SEARCH -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                💼
+            </div>
+
+            <h3>
+                AI Job Search
+            </h3>
+
+            <p>
+                Search for current job opportunities
+                based on your preferred role and location.
+            </p>
+
+            <a
+                href="/chatbot"
+                class="action-btn"
+            >
+                Search Jobs →
+            </a>
+
+        </div>
+
+
+
+        <!-- INTERVIEW -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🎤
+            </div>
+
+            <h3>
+                AI Interview Coach
+            </h3>
+
+            <p>
+                Practice interview questions and receive
+                performance feedback based on your answers.
+            </p>
+
+            <a
+                href="/interview"
+                class="action-btn"
+            >
+                Start Interview →
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         ROLE BASED ANALYSIS
+    ================================================== -->
+
+    <section class="role-section">
+
+
+        <div class="section-title">
+
+            <h2>
+                🎯 Resume Analysis by Job Role
+            </h2>
+
+            <p>
+                Select the role you are targeting before
+                analyzing your resume.
+            </p>
+
+        </div>
+
+
+        <form
+            action="/analyze"
+            method="GET"
+            class="role-form"
+        >
+
+
+            <div class="role-field">
+
+                <label for="role">
+                    Select Target Job Role
+                </label>
+
+
+                <select
+                    id="role"
+                    name="role"
+                >
+
+                    <option value="Software Developer">
+                        Software Developer
+                    </option>
+
+                    <option value="Python Developer">
+                        Python Developer
+                    </option>
+
+                    <option value="AI Engineer">
+                        AI Engineer
+                    </option>
+
+                    <option value="Data Analyst">
+                        Data Analyst
+                    </option>
+
+                    <option value="Full Stack Developer">
+                        Full Stack Developer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="action-btn"
+            >
+                📊 Analyze for This Role
+            </button>
+
+
+        </form>
+
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        AI Resume Analyzer & Interview Coach
+
+        <br>
+
+        AI-powered career assistance platform
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Interview Result | AI Resume Analyzer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #1f4e79;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* SUCCESS MESSAGE */
+
+        .success-box {
+            background: #eef8f0;
+            border-left: 5px solid #28a745;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .success-box h2 {
+            margin: 0 0 8px 0;
+            color: #218838;
+        }
+
+        .success-box p {
+            margin: 0;
+            color: #555;
+        }
+
+        /* QUESTION CARD */
+
+        .question-card {
+            background: white;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f4e79;
+            margin-bottom: 18px;
+        }
+
+        .question-text {
+            background: #f7f9fc;
+            border-left: 4px solid #1f4e79;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        /* FEEDBACK */
+
+        .feedback-section {
+            margin-top: 18px;
+        }
+
+        .feedback-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 7px;
+        }
+
+        .feedback-section p {
+            background: #fafafa;
+            padding: 13px;
+            border-radius: 8px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            margin: 0;
+        }
+
+        /* ANSWER */
+
+        .answer-box {
+            background: #f7f9fc;
+            border: 1px solid #e1e7ef;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        /* IMPROVED ANSWER */
+
+        .improved-answer {
+            background: #eef8f0 !important;
+            border-left: 4px solid #28a745;
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .new-btn {
+            background: #1f4e79;
+        }
+
+        .home-btn {
+            background: #555;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .header,
+            .question-card {
+                padding: 20px;
+            }
+
+            .btn {
+                display: block;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🎯 Interview Completed
+        </h1>
+
+        <p>
+            <strong>Role:</strong>
+            {{ role }}
+        </p>
+
+        <p>
+            You have completed all
+            <strong>{{ total_questions }}</strong>
+            interview questions.
+        </p>
+
+        <p>
+            Review the AI feedback below to improve your answers.
+        </p>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div class="success-box">
+
+        <h2>
+            ✅ AI Interview Analysis Completed
+        </h2>
+
+        <p>
+            Your answers were analyzed for grammar, spelling,
+            vocabulary, clarity, technical content, missing points,
+            and improvement suggestions.
+        </p>
+
+    </div>
+
+
+    <!-- INTERVIEW RESULTS -->
+
+    {% if answers %}
+
+        {% for i in range(answers|length) %}
+
+            {% set current_answer = answers[i] %}
+
+            {% set current_feedback = {} %}
+
+
+            <!-- GET FEEDBACK -->
+
+            {% if feedback_history %}
+
+                {% if feedback_history is mapping %}
+
+                    {% set current_feedback = feedback_history.get(i, {}) %}
+
+                {% elif i < feedback_history|length %}
+
+                    {% set current_feedback = feedback_history[i] %}
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <!-- SAFETY CHECK -->
+
+            {% if current_feedback is not mapping %}
+
+                {% set current_feedback = {} %}
+
+            {% endif %}
+
+
+            <!-- QUESTION CARD -->
+
+            <div class="question-card">
+
+                <div class="question-title">
+
+                    Question {{ i + 1 }}
+
+                </div>
+
+
+                <!-- QUESTION -->
+
+                {% if questions and i < questions|length %}
+
+                    <div class="feedback-section">
+
+                        <h3>
+                            ❓ Interview Question
+                        </h3>
+
+                        <div class="question-text">
+
+                            {{ questions[i] }}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- ANSWER -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        📝 Your Answer
+                    </h3>
+
+                    <div class="answer-box">
+
+                        {{ current_answer }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- OVERALL ANALYSIS -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        🔍 Overall Analysis
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "analysis",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- GRAMMAR -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        ✍️ Grammar
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "grammar",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- SPELLING -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        🔤 Spelling
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "spelling",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- VOCABULARY -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        📚 Vocabulary
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "vocabulary",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- CLARITY -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        💬 Sentence Clarity
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "clarity",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- TECHNICAL -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        💻 Technical / Content
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "technical",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- MISSING POINTS -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        📌 Missing Points
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "missing_points",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- IMPROVEMENTS -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        🛠️ How to Improve
+                    </h3>
+
+                    <p>
+                        {{ current_feedback.get(
+                            "improvements",
+                            "AI analysis unavailable."
+                        ) }}
+                    </p>
+
+                </div>
+
+
+                <!-- IMPROVED ANSWER -->
+
+                <div class="feedback-section">
+
+                    <h3>
+                        ⭐ Professional Improved Answer
+                    </h3>
+
+                    <p class="improved-answer">
+
+                        {{ current_feedback.get(
+                            "improved_answer",
+                            current_answer
+                        ) }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <!-- EMPTY RESULT -->
+
+        <div class="question-card">
+
+            <div class="success-box">
+
+                <h2>
+                    ⚠️ No Interview Results Found
+                </h2>
+
+                <p>
+                    Please start a new interview.
+                </p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <a
+            href="{{ url_for('interview', new=1) }}"
+            class="btn new-btn"
+        >
+            🔄 Start New Interview
+        </a>
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="btn home-btn"
+        >
+            🏠 Back to Home
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

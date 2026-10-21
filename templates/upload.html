@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Resume | AI Resume Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .upload-wrapper {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-bottom: 18px;
+
+            padding: 11px 18px;
+
+            background: rgba(255, 255, 255, 0.95);
+            color: #334155;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #f1f5f9;
+            transform: translateX(-3px);
+        }
+
+        /* MAIN CARD */
+
+        .upload-card {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 45px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.20);
+
+            text-align: center;
+        }
+
+        /* ICON */
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 38px;
+
+            box-shadow:
+                0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* TITLE */
+
+        .upload-card h1 {
+            color: #1e293b;
+
+            font-size: 30px;
+
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            margin-bottom: 30px;
+        }
+
+        /* UPLOAD AREA */
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+
+            border-radius: 16px;
+
+            padding: 35px 25px;
+
+            background: #f8fafc;
+
+            transition: 0.3s;
+
+            margin-bottom: 25px;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+
+            background: #f5f7ff;
+        }
+
+        .upload-area-icon {
+            font-size: 42px;
+
+            margin-bottom: 12px;
+        }
+
+        .upload-area h3 {
+            color: #334155;
+
+            margin-bottom: 8px;
+
+            font-size: 18px;
+        }
+
+        .upload-area p {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 20px;
+        }
+
+        /* FILE INPUT */
+
+        .file-input {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 10px;
+
+            background: white;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+        .file-input:hover {
+            border-color: #667eea;
+        }
+
+        /* UPLOAD BUTTON */
+
+        .upload-btn {
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 8px 20px rgba(102, 126, 234, 0.25);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(102, 126, 234, 0.35);
+        }
+
+        /* INFO */
+
+        .upload-info {
+            margin-top: 25px;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .info-box {
+            padding: 15px 10px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-box strong {
+            display: block;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+        }
+
+        .info-box span {
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+        /* FLASH MESSAGE */
+
+        .flash-message {
+            background: #dcfce7;
+
+            color: #166534;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px;
+            }
+
+            .upload-card {
+                padding: 30px 20px;
+            }
+
+            .upload-card h1 {
+                font-size: 25px;
+            }
+
+            .upload-info {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="upload-wrapper">
+
+    <!-- BACK TO DASHBOARD -->
+
+    <a href="{{ url_for('home') }}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+
+    <!-- MAIN CARD -->
+
+    <div class="upload-card">
+
+        <!-- ICON -->
+
+        <div class="upload-icon">
+            📄
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Upload Your Resume
+        </h1>
+
+        <p class="subtitle">
+            Upload your resume and let our AI analyze
+            your skills, experience and ATS compatibility.
+        </p>
+
+
+        <!-- FLASH MESSAGE -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="flash-message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- UPLOAD FORM -->
+
+        <form
+            action="{{ url_for('upload') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="upload-area">
+
+                <div class="upload-area-icon">
+                    ☁️
+                </div>
+
+                <h3>
+                    Select your resume
+                </h3>
+
+                <p>
+                    Choose a PDF or DOCX file from your computer
+                </p>
+
+                <input
+                    type="file"
+                    name="resume"
+                    class="file-input"
+                    accept=".pdf,.docx"
+                    required
+                >
+
+            </div>
+
+
+            <!-- UPLOAD BUTTON -->
+
+            <button
+                type="submit"
+                class="upload-btn"
+            >
+                🚀 Upload & Continue
+            </button>
+
+        </form>
+
+
+        <!-- INFORMATION -->
+
+        <div class="upload-info">
+
+            <div class="info-box">
+
+                <strong>📄 File Type</strong>
+
+                <span>
+                    PDF / DOCX
+                </span>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>🤖 AI Analysis</strong>
+
+                <span>
+                    ATS & Skills
+                </span>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>🔒 Secure</strong>
+
+                <span>
+                    Your Resume
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

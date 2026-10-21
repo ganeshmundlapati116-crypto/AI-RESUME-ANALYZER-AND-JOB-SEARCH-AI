@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Saved Jobs | AI Resume Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f7fc;
+            color: #172033;
+        }
+
+        .saved-page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 32px 24px 60px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-size: 19px;
+            font-weight: 800;
+            color: #243b80;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #4338ca, #7c3aed);
+            color: white;
+            padding: 32px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.17);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #ede9fe;
+            line-height: 1.6;
+        }
+
+        .hero-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .count-badge {
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 380px;
+            padding: 12px 15px;
+            border: 1px solid #dce2ee;
+            border-radius: 11px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .section-heading span {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            border: 1px solid #e4e9f2;
+            border-radius: 17px;
+            padding: 23px;
+            box-shadow: 0 5px 16px rgba(20, 35, 70, 0.045);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            min-width: 0;
+        }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(20, 35, 70, 0.09);
+        }
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .job-title {
+            font-size: 19px;
+            font-weight: 750;
+            line-height: 1.4;
+            margin: 0 0 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .company {
+            color: #5b6477;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .heart {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin: 18px 0;
+        }
+
+        .detail-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .job-description {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 16px 0 22px;
+            overflow-wrap: anywhere;
+        }
+
+        .job-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid #eef1f6;
+            padding-top: 18px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            padding: 11px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-apply {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-apply:hover {
+            background: #3730a3;
+        }
+
+        .btn-remove {
+            background: #fff1f2;
+            color: #e11d48;
+            border: 1px solid #ffe0e5;
+        }
+
+        .btn-remove:hover {
+            background: #ffe4e6;
+        }
+
+        .btn-back {
+            background: white;
+            color: #4338ca;
+            border: 1px solid #dcdcfb;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px dashed #cbd5e1;
+            border-radius: 18px;
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-icon {
+            font-size: 52px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h2 {
+            margin: 0 0 10px;
+            font-size: 23px;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0 0 22px;
+        }
+
+        .no-results {
+            display: none;
+            padding: 24px;
+            text-align: center;
+            color: #64748b;
+            background: white;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 45px;
+        }
+
+        @media (max-width: 760px) {
+            .saved-page {
+                padding: 20px 14px 40px;
+            }
+
+            .hero {
+                padding: 24px 20px;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="saved-page">
+
+    <div class="topbar">
+        <div class="brand">AI Resume Analyzer</div>
+        <a class="back-link"
+           href="{{ url_for('chatbot') }}">
+            ← Back to Job Search
+        </a>
+    </div>
+
+    <section class="hero">
+        <h1>❤️ My Saved Jobs</h1>
+        <p>Your favorite job opportunities, all in one place.</p>
+
+        <div class="hero-bottom">
+            <div class="count-badge">
+                ⭐ {{ jobs|length }} Saved Job{% if jobs|length != 1 %}s{% endif %}
+            </div>
+
+            {% if jobs %}
+            <input
+                type="search"
+                id="jobSearch"
+                class="search-box"
+                placeholder="🔎 Search by job title or company..."
+                aria-label="Search saved jobs">
+            {% endif %}
+        </div>
+    </section>
+
+    {% if jobs %}
+
+        <div class="section-heading">
+            <h2>Your Job Collection</h2>
+            <span>Keep track of opportunities you like</span>
+        </div>
+
+        <div class="jobs-grid" id="jobsGrid">
+
+            {% for job in jobs %}
+            <article class="job-card"
+                     data-search="{{ (job.title ~ ' ' ~ (job.company or '') ~ ' ' ~ (job.location or '') ~ ' ' ~ (job.country or ''))|lower }}">
+
+                <div class="job-top">
+                    <div>
+                        <h3 class="job-title">{{ job.title }}</h3>
+                        <div class="company">
+                            🏢 {{ job.company or 'Company not specified' }}
+                        </div>
+                    </div>
+                    <div class="heart">💜</div>
+                </div>
+
+                <div class="job-details">
+                    {% if job.location %}
+                    <span class="detail-tag">📍 {{ job.location }}</span>
+                    {% endif %}
+
+                    {% if job.country %}
+                    <span class="detail-tag">🌎 {{ job.country }}</span>
+                    {% endif %}
+
+                    {% if job.employment_type %}
+                    <span class="detail-tag">💼 {{ job.employment_type }}</span>
+                    {% endif %}
+
+                    {% if job.salary %}
+                    <span class="detail-tag">💰 {{ job.salary }}</span>
+                    {% endif %}
+
+                    {% if job.remote %}
+                    <span class="detail-tag">🏠 Remote</span>
+                    {% endif %}
+                </div>
+
+                <p class="job-description">
+                    {{ (job.description or 'No job description available.')[:230] }}
+                    {% if job.description and job.description|length > 230 %}...{% endif %}
+                </p>
+
+                <div class="job-actions">
+                    {% if job.apply_link %}
+                    <a class="btn btn-apply"
+                       href="{{ job.apply_link }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        🚀 Apply Now
+                    </a>
+                    {% endif %}
+
+                    <form method="POST"
+                          action="{{ url_for('remove_saved_job', saved_id=job.id) }}"
+                          onsubmit="return confirm('Remove this job from your saved list?');">
+                        <button type="submit" class="btn btn-remove">
+                            🗑 Remove
+                        </button>
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+
+        </div>
+
+        <div class="no-results" id="noResults">
+            No saved jobs match your search. Try another keyword.
+        </div>
+
+    {% else %}
+
+        <section class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h2>No Saved Jobs Yet</h2>
+            <p>
+                You haven't saved any jobs yet.<br>
+                Explore job opportunities and save the ones you like.
+            </p>
+            <a class="btn btn-apply"
+               href="{{ url_for('chatbot') }}">
+                🔎 Explore Jobs
+            </a>
+        </section>
+
+    {% endif %}
+
+    <footer class="footer">
+        AI Resume Analyzer & Interview Coach · Your career journey starts here.
+    </footer>
+
+</div>
+
+<script>
+    const jobSearch = document.getElementById("jobSearch");
+    const jobCards = document.querySelectorAll(".job-card");
+    const noResults = document.getElementById("noResults");
+
+    if (jobSearch) {
+        jobSearch.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            jobCards.forEach(function (card) {
+                const searchableText = card.dataset.search || "";
+                const matches = searchableText.includes(query);
+
+                card.style.display = matches ? "" : "none";
+
+                if (matches) {
+                    visibleCount++;
+                }
+            });
+
+            if (noResults) {
+                noResults.style.display =
+                    visibleCount === 0 ? "block" : "none";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

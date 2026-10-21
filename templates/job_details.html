@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ job.title }} - Job Details</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           TOP NAVIGATION
+        ========================= */
+
+        .top-bar {
+            background: white;
+            margin: 18px auto;
+            width: 96%;
+            max-width: 1500px;
+            padding: 20px 28px;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            gap: 35px;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #1769ff;
+            font-size: 16px;
+            font-weight: 600;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 25px;
+            font-weight: 700;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 96%;
+            max-width: 1500px;
+            margin: 0 auto 40px;
+        }
+
+        /* =========================
+           JOB HEADER
+        ========================= */
+
+        .job-header {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+
+            margin-bottom: 18px;
+        }
+
+        .job-header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        /* COMPANY LOGO */
+
+        .company-logo {
+            width: 125px;
+            height: 125px;
+
+            border-radius: 18px;
+
+            background: #f2f6ff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 60px;
+            font-weight: bold;
+
+            color: #1257d6;
+
+            border: 1px solid #dce6ff;
+        }
+
+        .job-title {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: #101828;
+        }
+
+        .company-name {
+            color: #1769ff;
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .location {
+            color: #475467;
+            font-size: 16px;
+            margin-bottom: 14px;
+        }
+
+        /* BADGES */
+
+        .badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: #e8f8ef;
+            color: #16834b;
+        }
+
+        .badge-blue {
+            background: #edf4ff;
+            color: #1769ff;
+        }
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .job-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+
+            min-width: 170px;
+        }
+
+        .apply-btn {
+            background: #1769ff;
+            color: white;
+
+            border: none;
+            border-radius: 9px;
+
+            padding: 14px 25px;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            text-decoration: none;
+            text-align: center;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .apply-btn:hover {
+            background: #0d52d6;
+        }
+
+        .save-btn {
+            background: white;
+            color: #1769ff;
+
+            border: none;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            padding: 8px;
+        }
+
+        .save-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           JOB INFORMATION
+        ========================= */
+
+        .job-info {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            display: grid;
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+
+            margin-bottom: 18px;
+        }
+
+        .info-box {
+            padding: 8px 25px;
+
+            border-right: 1px solid #e4e7ec;
+        }
+
+        .info-box:last-child {
+            border-right: none;
+        }
+
+        .info-label {
+            color: #667085;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #101828;
+        }
+
+        .info-icon {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 2.1fr)
+                minmax(300px, 1fr);
+
+            gap: 18px;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-size: 21px;
+
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #101828;
+        }
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
+        .description {
+            color: #344054;
+
+            font-size: 16px;
+
+            white-space: pre-line;
+        }
+
+        .description-container {
+            position: relative;
+        }
+
+        .description-text {
+            max-height: 500px;
+            overflow: hidden;
+
+            transition: max-height 0.4s ease;
+        }
+
+        .description-text.expanded {
+            max-height: none;
+        }
+
+        .show-more {
+            margin-top: 18px;
+
+            width: 100%;
+
+            padding: 12px;
+
+            background: white;
+
+            border: none;
+
+            border-top: 1px solid #eaecf0;
+
+            color: #1769ff;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .show-more:hover {
+            background: #f8faff;
+        }
+
+        /* =========================
+           RESUME TIP
+        ========================= */
+
+        .resume-tip {
+            margin-top: 25px;
+
+            border: 1px solid #c9dcff;
+
+            background: #f4f8ff;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        .tip-title {
+            color: #1769ff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+        .tip-text {
+            color: #667085;
+
+            font-size: 14px;
+        }
+
+        .analyze-btn {
+            border: 1px solid #1769ff;
+
+            color: #1769ff;
+
+            background: white;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        .analyze-btn:hover {
+            background: #1769ff;
+            color: white;
+        }
+
+        /* =========================
+           COMPANY CARD
+        ========================= */
+
+        .company-card {
+            position: sticky;
+            top: 20px;
+        }
+
+        .company-header {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .company-small-logo {
+            width: 60px;
+            height: 60px;
+
+            border-radius: 12px;
+
+            background: #f2f6ff;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: #1257d6;
+
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .verified {
+            color: #1769ff;
+            font-size: 15px;
+        }
+
+        .company-description {
+            color: #475467;
+
+            font-size: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           COMPANY STATS
+        ========================= */
+
+        .company-stat {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #eaecf0;
+
+            font-size: 15px;
+        }
+
+        .stat-label {
+            color: #667085;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #101828;
+        }
+
+        .website-btn {
+            display: block;
+
+            width: 100%;
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            padding: 13px;
+
+            border: 1px solid #1769ff;
+
+            color: #1769ff;
+
+            background: white;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+        .website-btn:hover {
+            background: #1769ff;
+            color: white;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 25px;
+            }
+
+            .job-actions {
+                width: 100%;
+                flex-direction: row;
+            }
+
+            .apply-btn {
+                flex: 1;
+            }
+
+            .job-info {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .info-box {
+                border-right: none;
+                border-bottom: 1px solid #eaecf0;
+                padding: 15px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .company-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .top-bar {
+                width: 94%;
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .job-header {
+                padding: 22px;
+            }
+
+            .job-header-left {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .job-title {
+                font-size: 25px;
+            }
+
+            .company-logo {
+                width: 90px;
+                height: 90px;
+                font-size: 42px;
+            }
+
+            .job-info {
+                grid-template-columns: 1fr;
+            }
+
+            .job-actions {
+                flex-direction: column;
+            }
+
+            .resume-tip {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="top-bar">
+
+    <a
+        href="{{ url_for('chatbot') }}"
+        class="back-link"
+    >
+        ← Back to Job Search
+    </a>
+
+    <div class="page-title">
+        💼 Job Details
+    </div>
+
+</div>
+
+
+
+<div class="container">
+
+
+    <!-- =========================
+         JOB HEADER
+    ========================= -->
+
+    <div class="job-header">
+
+        <div class="job-header-left">
+
+
+            <!-- COMPANY LOGO -->
+
+            <div class="company-logo">
+
+                {% if job.company %}
+
+                    {{ job.company[0]|upper }}
+
+                {% else %}
+
+                    J
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- JOB INFORMATION -->
+
+            <div>
+
+                <h1 class="job-title">
+                    {{ job.title }}
+                </h1>
+
+
+                <div class="company-name">
+
+                    🏢 {{ job.company }}
+
+                    <span class="verified">
+                        ✔
+                    </span>
+
+                </div>
+
+
+                <div class="location">
+
+                    📍 {{ job.location }}
+
+                </div>
+
+
+                <div class="badges">
+
+                    <span class="badge badge-green">
+
+                        💼
+                        {{ job.employment_type }}
+
+                    </span>
+
+
+                    {% if job.remote %}
+
+                    <span class="badge badge-blue">
+
+                        🏠 Remote
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge badge-blue">
+
+                        🏢 On-site
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             ACTIONS
+        ========================= -->
+
+        <div class="job-actions">
+
+
+            {% if job.apply_link and job.apply_link != "#" %}
+
+            <a
+                href="{{ job.apply_link }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="apply-btn"
+            >
+
+                🚀 Apply Now ↗
+
+            </a>
+
+            {% else %}
+
+            <button
+                class="apply-btn"
+                disabled
+                style="opacity:0.6;"
+            >
+
+                Apply Now
+
+            </button>
+
+            {% endif %}
+
+
+            <form method="POST"
+      action="{{ url_for('save_job', job_index=job_index) }}"
+
+    <button type="submit" class="save-btn">
+        ❤️ Save Job
+    </button>
+
+</form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         JOB INFORMATION BAR
+    ========================= -->
+
+    <div class="job-info">
+
+
+        <div class="info-box">
+
+            <div class="info-icon">
+                📰
+            </div>
+
+            <div class="info-label">
+                Publisher
+            </div>
+
+            <div class="info-value">
+                {{ job.publisher }}
+            </div>
+
+        </div>
+
+
+
+        <div class="info-box">
+
+            <div class="info-icon">
+                📅
+            </div>
+
+            <div class="info-label">
+                Posted
+            </div>
+
+            <div class="info-value">
+                {{ job.posted }}
+            </div>
+
+        </div>
+
+
+
+        <div class="info-box">
+
+            <div class="info-icon">
+                💼
+            </div>
+
+            <div class="info-label">
+                Employment Type
+            </div>
+
+            <div class="info-value">
+                {{ job.employment_type }}
+            </div>
+
+        </div>
+
+
+
+        <div class="info-box">
+
+            <div class="info-icon">
+                💰
+            </div>
+
+            <div class="info-label">
+                Salary
+            </div>
+
+            <div class="info-value">
+                {{ job.salary }}
+            </div>
+
+        </div>
+
+
+
+        <div class="info-box">
+
+            <div class="info-icon">
+                🏠
+            </div>
+
+            <div class="info-label">
+                Work Mode
+            </div>
+
+            <div class="info-value">
+
+                {% if job.remote %}
+                    Remote
+                {% else %}
+                    On-site
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         CONTENT
+    ========================= -->
+
+    <div class="content-grid">
+
+
+        <!-- =========================
+             LEFT SIDE
+        ========================= -->
+
+        <div>
+
+
+            <!-- JOB DESCRIPTION -->
+
+            <div class="card">
+
+                <h2 class="card-title">
+
+                    📄 Job Description
+
+                </h2>
+
+
+                <div class="description-container">
+
+                    <div
+                        id="description"
+                        class="description description-text"
+                    >
+
+                        {{ job.description }}
+
+                    </div>
+
+
+                    <button
+                        id="showMoreBtn"
+                        class="show-more"
+                        onclick="toggleDescription()"
+                    >
+
+                        Show More ↓
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- RESUME TIP -->
+
+                <div class="resume-tip">
+
+                    <div>
+
+                        <div class="tip-title">
+
+                            ⭐ Tip: Tailor Your Resume
+
+                        </div>
+
+                        <div class="tip-text">
+
+                            Update your resume to match the
+                            skills and requirements mentioned
+                            in this job description.
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for('analyze') }}"
+                        class="analyze-btn"
+                    >
+
+                        📊 Analyze Resume
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             RIGHT SIDE
+        ========================= -->
+
+        <div>
+
+
+            <div class="card company-card">
+
+
+                <h2 class="card-title">
+
+                    🏢 About the Company
+
+                </h2>
+
+
+
+                <div class="company-header">
+
+                    <div class="company-small-logo">
+
+                        {% if job.company %}
+
+                            {{ job.company[0]|upper }}
+
+                        {% else %}
+
+                            J
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+
+                            {{ job.company }}
+
+                            <span class="verified">
+                                ✔
+                            </span>
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <p class="company-description">
+
+                    Explore this opportunity and learn more
+                    about the company, role requirements,
+                    responsibilities and application process.
+
+                </p>
+
+
+
+                <div class="company-stat">
+
+                    <span class="stat-label">
+                        📍 Location
+                    </span>
+
+                    <span class="stat-value">
+                        {{ job.location }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="company-stat">
+
+                    <span class="stat-label">
+                        📰 Publisher
+                    </span>
+
+                    <span class="stat-value">
+                        {{ job.publisher }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="company-stat">
+
+                    <span class="stat-label">
+                        💼 Job Type
+                    </span>
+
+                    <span class="stat-value">
+                        {{ job.employment_type }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="company-stat">
+
+                    <span class="stat-label">
+                        🏠 Work Mode
+                    </span>
+
+                    <span class="stat-value">
+
+                        {% if job.remote %}
+                            Remote
+                        {% else %}
+                            On-site
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+
+                {% if job.apply_link and job.apply_link != "#" %}
+
+                <a
+                    href="{{ job.apply_link }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="website-btn"
+                >
+
+                    🚀 Visit Application ↗
+
+                </a>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    /* =========================
+       SHOW MORE / SHOW LESS
+    ========================= */
+
+    function toggleDescription() {
+
+        const description =
+            document.getElementById("description");
+
+        const button =
+            document.getElementById("showMoreBtn");
+
+
+        description.classList.toggle("expanded");
+
+
+        if (
+            description.classList.contains("expanded")
+        ) {
+
+            button.innerHTML =
+                "Show Less ↑";
+
+        } else {
+
+            button.innerHTML =
+                "Show More ↓";
+
+        }
+
+    }
+
+
+
+    /* =========================
+       SAVE JOB
+    ========================= */
+
+    function saveJob() {
+
+        const button =
+            document.querySelector(".save-btn");
+
+
+        button.innerHTML =
+            "✅ Job Saved";
+
+
+        button.style.color =
+            "#16834b";
+
+
+        setTimeout(function() {
+
+            button.innerHTML =
+                "🔖 Saved";
+
+        }, 1500);
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
